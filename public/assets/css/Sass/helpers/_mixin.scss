@@ -1,0 +1,94 @@
+//media
+@mixin breakpoints($point) {
+  @if $point == mobile {
+    @media (max-width: 767px) {
+      @content;
+    }
+  } @else if $point == small {
+    @media (min-width: 768px) and (max-width: 991px) {
+      @content;
+    }
+  } @else if $point == medium {
+    @media (min-width: 992px) and (max-width: 1199px) {
+      @content;
+    }
+  } @else if $point == large {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+}
+
+// center first
+@mixin center {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+// center
+@mixin centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@mixin center-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@mixin col-cen-between {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+@mixin col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// circle 50%
+@mixin circle($dimensions) {
+  border-radius: 50%;
+  width: $dimensions;
+  height: $dimensions;
+  overflow: hidden;
+}
+
+// animations
+@mixin keyframes($name) {
+  @keyframes #{$name} {
+    @content;
+  }
+}
+@mixin animation($name, $duration) {
+  // transition: all ($duration + s) linear;
+  animation: #{$name} ($duration + s) linear;
+}
+@mixin keyframes-zoom($name) {
+  @keyframes #{$name} {
+    0% {
+      transform: scale3d(1, 1, 1);
+    }
+    50% {
+      transform: scale3d(0.9, 0.75, 1);
+    }
+    100% {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+}
+
+//width and height
+@mixin sizing($width, $heigh) {
+  width: $width;
+  height: $heigh;
+}
+
+// border one left OR right OR top OR bottom
+@mixin border-dir($name-color, $direction) {
+  border: {
+    #{$direction}: 1px solid $name-color;
+  }
+}

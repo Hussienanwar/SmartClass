@@ -1,0 +1,292 @@
+// import file mixin
+@use "../helpers/mixin" as *;
+// import file variable
+@use "../helpers/variable" as *;
+
+@for $i from 1 through $grid-cols {
+  .col-#{$i} {
+    width: percentage($i / $grid-cols);
+  }
+}
+%sec-wid-heigh {
+  height: inherit;
+}
+
+.mai-cha {
+  margin: {
+    top: var(--had-heigh);
+  }
+  width: 100%;
+  @extend %sec-wid-heigh;
+  display: flex;
+
+  main {
+    @if $theme == "dark" {
+      background-color: $dark-back;
+      @include border-dir($border-light-dark, right);
+    } @else if $theme == "light" {
+      background-color: $light-back;
+      @include border-dir($border-light-dark, right);
+    }
+    @extend %sec-wid-heigh;
+    padding: {
+      top: 5px;
+      bottom: 10px;
+    }
+    overflow: hidden;
+    .head-mai {
+      width: 100%;
+      height: $header-main-heigh;
+      @include col-cen-between;
+      padding: {
+        left: 10px;
+        right: 10px;
+      }
+      .nam-adt {
+        width: 100%;
+        height: 40px;
+        @include center-between;
+        h2 {
+          font: {
+            size: 25px;
+            weight: bold;
+          }
+          @if $theme == "dark" {
+            color: $dark-color;
+          } @else if $theme == "light" {
+            color: $light-color;
+          }
+          letter-spacing: 1px;
+        }
+        ul {
+          @include centering;
+          li {
+            font-size: 20px;
+            margin: {
+              left: 5px;
+              right: 10px;
+            }
+            @if $theme == "dark" {
+              color: $dark-color;
+            } @else if $theme == "light" {
+              color: $light-color;
+            }
+            cursor: pointer;
+            &:hover {
+              @include animation(zoom, 0.5);
+            }
+          }
+        }
+      }
+      .search {
+        $pad-size: 30px;
+        position: relative;
+        width: 100%;
+        input {
+          width: 100%;
+          height: $pad-size;
+          outline: none;
+          @if $theme == "dark" {
+            background-color: $dark-back;
+            color: $dark-color;
+            border: none {
+              bottom: 2px solid $border-light-dark;
+            }
+          } @else if $theme == "light" {
+            background-color: $light-back;
+            color: $light-color;
+            border: none {
+              bottom: 2px solid $border-light-dark;
+            }
+          }
+          padding: {
+            left: calc($pad-size + 3px);
+            right: calc($pad-size - 10px);
+          }
+          font: {
+            size: 18px;
+          }
+          letter-spacing: 1px;
+          border-radius: 20px;
+        }
+        i {
+          position: absolute;
+          top: 0;
+          left: 0;
+          color: #bdbdbd;
+          @include sizing($pad-size, $pad-size);
+          @include centering;
+        }
+      }
+    }
+    .content-groups {
+      margin: {
+        top: 5px;
+      }
+      height: calc(100% - $header-main-heigh);
+      padding: {
+        left: 10px;
+        right: 10px;
+      }
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 2px;
+      }
+      &::-webkit-scrollbar-track {
+        @if $theme == "dark" {
+          background: $dark-back;
+        } @else if $theme == "light" {
+          background: $light-back;
+        }
+      }
+      &::-webkit-scrollbar-thumb {
+        @if $theme == "dark" {
+          background: $border-light-dark;
+        } @else if $theme == "light" {
+          background: $border-light-dark;
+        }
+        // background: #888;
+        border-radius: 6px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      .Groups-card {
+        width: 100%;
+        @include col-center;
+        .cd-group {
+          @include center-between;
+          @include sizing(100%, 60px);
+          border-radius: 10px;
+          @include border-dir($border-light-dark, bottom);
+          cursor: pointer;
+          margin: {
+            bottom: 5px;
+          }
+          overflow: hidden;
+          &:hover {
+            @if $theme == "dark" {
+              background-color: $dark-back-train;
+            } @else if $theme == "light" {
+              background-color: $light-back-train;
+            }
+          }
+          .image {
+            @include circle($space-img);
+            img {
+              @include sizing(100%, 100%);
+            }
+          }
+          .text {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            width: calc(100% - ($space-img + $space-date + 15px));
+            h3 {
+              @if $theme == "dark" {
+                color: $dark-color;
+              } @else if $theme == "light" {
+                color: $light-color;
+              }
+              font-weight: normal;
+              letter-spacing: 1px;
+            }
+            p {
+              // font-size: 20px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              letter-spacing: 1px;
+              color: #c2c2c2;
+              @if $theme == "dark" {
+                color: #c2c2c2;
+              } @else if $theme == "light" {
+                color: $light-back-train2;
+              }
+            }
+          }
+          .date {
+            p {
+              width: $space-date;
+              font-weight: bold;
+              letter-spacing: 1px;
+              @if $theme == "dark" {
+                color: #c2c2c2;
+              } @else if $theme == "light" {
+                color: $light-back-train2;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  section {
+    @if $theme == "dark" {
+      background-color: $dark-back;
+    } @else if $theme == "light" {
+      background-color: $light-back;
+    }
+    background-image: url(../image/fatigued.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    @extend %sec-wid-heigh;
+    .head-chat {
+      width: 100%;
+      height: 60px;
+      @if $theme == "dark" {
+        background-color: $dark-back;
+      } @else if $theme == "light" {
+        background-color: $light-back;
+      }
+      @include border-dir($border-light-dark, bottom);
+      @include center-between;
+      padding: {
+        right: 10px;
+        left: 10px;
+      }
+      .Profile-details {
+        cursor: pointer;
+        width: 100%;
+        @include center;
+        .image {
+          @include circle($space-img);
+          margin: {
+            left: 5px;
+            right: 10px;
+          }
+          img {
+            @include sizing(100%, 100%);
+          }
+        }
+        h2 {
+          @if $theme == "dark" {
+            color: $dark-color;
+          } @else if $theme == "light" {
+            color: $light-color;
+          }
+        }
+      }
+      .search {
+        width: 70px;
+        ul {
+          @include center-between;
+          li {
+            cursor: pointer;
+            font-size: 18px;
+            margin: {
+              left: 1px;
+              right: 10px;
+            }
+            @if $theme == "dark" {
+              color: $dark-color;
+            } @else if $theme == "light" {
+              color: $light-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
