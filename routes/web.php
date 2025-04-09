@@ -40,7 +40,7 @@ Route::get('/login/google', [GoogleAuthController::class, 'redirectToGoogle'])->
 Route::get('/login/google/callback', [GoogleAuthController::class, 'handleGoogleCallback']);
 
 Route::get('/students/upload', [StudentController::class, 'showUploadForm']);
-// Route::post('/students/d:\dashboard\assets', [StudentController::class, 'import'])->name('students.import');
+// Route::post('/students/d:\dashboard\assets', [StudentController::class, 'import'])->name('students.import'); moo
 Route::post('/rooms/{room}/import-students', [StudentController::class, 'importStudents'])
     ->name('students.import');
 require __DIR__.'/auth.php';
