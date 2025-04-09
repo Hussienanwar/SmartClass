@@ -16,8 +16,28 @@ class Room extends Model
     {
         return $this->belongsToMany(User::class, 'room_users', 'room_id', 'user_id');
     }
-    public function subjects(): HasMany
+    public function students()
     {
-        return $this->hasMany(Subject::class);
+        return $this->hasMany(Student::class, 'room_id');
     }
+    
+
+    public function roomUsers()
+    {
+        return $this->hasMany(RoomUser::class);
+    }
+
+    public function attendanceRecords()
+{
+    return $this->hasMany(attendance_record::class);
+}
+    public function userRole($userId)
+    {
+        return $this->roomUsers()->where('user_id', $userId)->value('role');
+    }
+    public function attendanceCards()
+{
+    return $this->hasMany(Attendance::class);
+}
+
 }

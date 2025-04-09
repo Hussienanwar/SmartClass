@@ -18,19 +18,6 @@ class RoomController extends Controller
 {
     public function index($id)
     {
-        $room = Room::find($id);
-    
-        if (!$room) {
-            return redirect()->back()->with('error', 'Room not found.');
-        }
-    
-        // Generate the join URL using the GET request
-        $joinUrl = route('room.join', ['code' => $room->code]);
-    
-        // Generate the QR code with the join URL
-        $qrCode = QrCode::size(200)->generate($joinUrl);
-    
-        return view('main.Room', compact('room', 'qrCode'));
     }
 
     public function store(RoomRequest $request)
@@ -62,44 +49,57 @@ class RoomController extends Controller
             return redirect()->back()->with('error', 'Room Error .');
         }
     }
-    public function join(Request $request)
+    public function join(JoinRoomRequest $request)
     {
         DB::beginTransaction();
         try {
             // Get the room code from request (works for both GET and POST)
-            $roomCode = $request->query('code') ?? $request->input('code');
-    
+            $roomCode =$request->input('code');
             $room = Room::where('code', $roomCode)->first();
-    
+
             if (!$room) {
                 return redirect()->route('home')->with('error', 'Invalid room code.');
             }
-    
             $userId = Auth::id();
-    
             // Check if the user is already in the room
             $alreadyJoined = RoomUser::where('user_id', $userId)
                 ->where('room_id', $room->id)
                 ->exists();
-    
             if ($alreadyJoined) {
                 return redirect()->route('rooms.show', $room->id)->with('info', 'You are already in this room.');
             }
-    
             // Add user to room
             RoomUser::create([
                 'user_id' => $userId,
                 'room_id' => $room->id,
                 'role' => 'member',
             ]);
-    
             DB::commit();
-            return redirect()->route('rooms.show', $room->id)->with('success', 'You joined the room successfully.');
+            return redirect()->back()->with('success', 'You joined the room successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('home')->with('error', 'An error occurred while joining the room.');
+            return redirect()->back()->with('error', 'An error occurred while joining the room.');
         }
     }
-    
+    public function show($id)
+    {
+        $room = Room::with('students', 'roomUsers')->findOrFail($id);
+        $qrCode = QrCode::size(200)->generate($room->code);
+        $adminCount = $room->roomUsers->where('role', 'admin')->count();
 
+        // Get the current user's role in the room
+        $userRole = $room->userRole(auth()->id());
+        return view('main.room', compact('room', 'qrCode', 'userRole','adminCount'));
+    }
+    public function members($id)
+    {
+        $room = Room::with('roomUsers.user')->findOrFail($id);
+        $qrCode = QrCode::size(200)->generate($room->code);
+        
+        // Count admins (teachers)
+        $adminCount = $room->roomUsers->where('role', 'admin')->count();
+    
+        return view('main.members', compact('room', 'qrCode', 'adminCount'));
+    }
+    
 }

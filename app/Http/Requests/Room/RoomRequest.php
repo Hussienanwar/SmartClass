@@ -23,7 +23,7 @@ class RoomRequest extends FormRequest
     {
         return [
             'name'=>'required',
-            'path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ];
     }
 }

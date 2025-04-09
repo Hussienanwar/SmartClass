@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RoomUser extends Model
 {
@@ -10,5 +11,10 @@ class RoomUser extends Model
         'user_id',
         'room_id',
         'role',
+        'code'
     ];
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Room::class, 'room_users', 'user_id', 'room_id');
     }
+    public function attendanceRecords()
+{
+    return $this->hasMany(attendance_record::class, 'student_id');
+}
+
 }
