@@ -21,13 +21,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 Route::match(['get', 'post'], '/room/join', [RoomController::class, 'join'])->name('room.join');
-
 Route::post('/room', [RoomController::class, 'store'])->name('room.store');
 Route::get('/room/index/{id}', [RoomController::class, 'index'])->name('room.index');
 Route::post('/subject/store/{id}', [SubjectController::class, 'store'])->name('subject.store');
-Route::get('/features/{id}', [FeatureController::class, 'index'])->name('features.index');
+// Route::get('/features/{id}', [FeatureController::class, 'index'])->name('features.index');
 
 // GoogleLoginController redirect and callback urls
 Route::get('/login/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
