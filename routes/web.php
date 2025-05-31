@@ -23,24 +23,101 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::post( '/room/join', [RoomController::class, 'join'])->name('room.join');
-Route::post('/room', [RoomController::class, 'store'])->name('room.store');
-Route::get('/room/{id}', [RoomController::class, 'show'])->name('room.show');
+// ==========================
+// Room Resource
+// ==========================
 
-Route::get('/room/{id}/students', [StudentController::class, 'index'])->name('students.index');
+Route::middleware(['auth', 'joined.room'])->group(function () {
+
+
+// Connect students to a room
+Route::post('/rooms/{room}/students/connect', [RoomController::class, 'connect'])->name('rooms.students.connect');
+
+// Get students in a room
+Route::get('/rooms/{room}/students', [StudentController::class, 'getStudents'])->middleware('admin')->name('rooms.students');
+
+
+// ==========================
+// Subject Resource
+// ==========================
+
+// List all rooms
+Route::get('/rooms/subjects/{room}', [RoomController::class, 'index'])->name('subjects.index')->middleware('joined.room');
+
+// Show subject details
+Route::get('subjects/{subject}', [SubjectController::class, 'show'])->name('subjects.show');
+
+// Store subject data (e.g., assign to room)
+Route::post('subjects/{room}', [SubjectController::class, 'store'])->middleware('admin')->name('subjects.store');
+
+//make doctor
+Route::post('subjects/{room}/{subject}', [SubjectController::class, 'doctor'])->middleware('admin')->name('subjects.doctor');
+
+// Show subject in a room
+Route::get('/rooms/{room}/subjects/{subject}', [SubjectController::class, 'index'])->name('rooms.subjects.show');
+
+Route::get('/rooms/{room}/subjects/{subject}/attend/{attend}',
+    [AttendanceController::class, 'attend'])
+    ->middleware('doctor.subject')
+    ->name('subjects.attend');
+
+Route::get('/rooms/{room}/subjects/{subject}/attend/{attend}/students',
+    [AttendanceController::class, 'attendStudents'])
+    ->middleware('doctor.subject')
+    ->name('subjects.attend.students');
+
+Route::post('/subjects/attend/scan', [AttendanceController::class, 'scan'])->name('subjects.attend.scan');
+Route::get('/rooms/{room}/subjects/{subject}/attend/{attend}/scan',[AttendanceController::class, 'scanindex'])->middleware('doctor.subject')->name('attend.scan.index');
+
+
+// ==========================
+// Attendance Resource
+// ==========================
+
+// Create attendance for a room and subject
+Route::post('/rooms/{room}/subjects/{subject}/attendance', [AttendanceController::class, 'store'])->middleware('doctor.subject')->name('attendance.store');
+
+// Get students for attendance in a room
+Route::get('/rooms/{room}/attendance/students', [AttendanceController::class, 'getStudents'])->middleware('doctor.subject')->name('attendance.students');
+
+
+// ==========================
+// Student Resource
+// ==========================
+
+// Import students into a room (you can also use this as POST if uploading files)
+Route::get('/rooms/{room}/students/import', [StudentController::class, 'index'])->middleware('admin')->name('students.index');
+Route::post('/rooms/{room}/students/import', [StudentController::class, 'importStudents'])->middleware('admin')->name('students.import');
+
+});
+
+Route::middleware('auth')->group(function () {
+// Create a new room
+Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
+// Join a room
+Route::post('/rooms/join', [RoomController::class, 'join'])->name('rooms.join');
+});
+
+// ==========================
+// Google Resource
+// ==========================
+
+Route::middleware('guest')->group(function () {
+Route::get('/login/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/login/google/callback', [GoogleAuthController::class, 'handleGoogleCallback']);
+});
+
+
+
+
 Route::get('/room/{id}/members', [RoomController::class, 'members'])->name('rooms.members');
 Route::get('/attendance/create/{id}', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get('/attendance/create/admin/{id}', [AttendanceController::class, 'indexAdmin'])->name('attendance.indexAdmin');
-Route::post('/attendance/create/{id}', [AttendanceController::class, 'store'])->name('attendance.store');
-Route::get('/attendance/{roomId}/students', [AttendanceController::class, 'getStudents'])->name('attendance.students');
 Route::post('/attendance/student/connect/{roomId}', [AttendanceController::class, 'connect'])->name('attendance.connect');
 
-// GoogleLoginController redirect and callback urls
-Route::get('/login/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('/login/google/callback', [GoogleAuthController::class, 'handleGoogleCallback']);
 
 Route::get('/students/upload', [StudentController::class, 'showUploadForm']);
 // Route::post('/students/d:\dashboard\assets', [StudentController::class, 'import'])->name('students.import');
-Route::post('/rooms/{room}/import-students', [StudentController::class, 'importStudents'])
-    ->name('students.import');
+// Route::post('/rooms/{room}/import-students', [StudentController::class, 'importStudents'])
+//     ->name('students.import');
 require __DIR__.'/auth.php';

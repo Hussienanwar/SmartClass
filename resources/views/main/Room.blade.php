@@ -13,7 +13,6 @@
         <div class="card shadow-lg p-4">
             @include('main.RoomModals.add')
             @include('main.RoomModals.join')
-            
             {{-- Statistic Cards Section --}}
             <div class="row text-center mb-4">
                 @if ($userRole === 'admin')

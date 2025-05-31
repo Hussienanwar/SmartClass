@@ -25,9 +25,10 @@ class User extends Authenticatable
         'password',
         'google_id',
         'drive_token',
-    'drive_refresh_token',
-    'drive_expires_at',
-    'path'
+        'drive_refresh_token',
+        'drive_expires_at',
+        'path',
+        'role'
     ];
 
     /**
@@ -54,11 +55,10 @@ class User extends Authenticatable
     }
     public function rooms(): BelongsToMany
     {
-        return $this->belongsToMany(Room::class, 'room_users', 'user_id', 'room_id');
+        return $this->belongsToMany(Room::class, 'room_users', 'user_id', 'room_id')->withPivot('role');;
     }
     public function attendanceRecords()
-{
-    return $this->hasMany(attendance_record::class, 'student_id');
-}
-
+    {
+        return $this->hasMany(AttendanceRecord::class, 'student_id');
+    }
 }

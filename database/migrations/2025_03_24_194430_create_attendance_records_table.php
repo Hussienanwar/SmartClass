@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('room_id')->references('id')->on('rooms')->cascadeOnDelete();
             $table->foreignId('student_id')->references('id')->on('students')->cascadeOnDelete();
             $table->foreignId('attendance_id')->references('id')->on('attendances')->cascadeOnDelete();
-            $table->boolean('status')->default(0); 
+            $table->foreignId('subject_id')->references('id')->on('subjects')->cascadeOnDelete();
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

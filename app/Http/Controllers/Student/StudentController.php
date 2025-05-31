@@ -9,14 +9,31 @@ use App\Models\Room;
 use App\Models\Student;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\ValidationException;
+use Yajra\DataTables\DataTables;
 
 class StudentController extends Controller
 {
     public function index($id)
     {
         $room = Room::with('students')->findOrFail($id);
-        return view('main.students', compact('room'));        
+        return view('main.Room.import', compact('room'));
     }
+    public function getStudents($roomId)
+{
+    $room = Room::findOrFail($roomId);
+
+    try {
+    $students = $room->students()->select(['id', 'name', 'code', 'section'])->get();
+
+    return DataTables::of($students)
+        ->addIndexColumn()
+        ->make(true);
+
+} catch (\Exception $e) {
+    return response()->json(['error' => $e->getMessage()], 500);
+}
+
+}
     public function importStudents(Request $request, $room_id)
     {
         $room = Room::findOrFail($room_id);
@@ -32,5 +49,5 @@ class StudentController extends Controller
         }
     }
 
-    
+
 }

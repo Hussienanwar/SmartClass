@@ -17,4 +17,9 @@ class RoomUser extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+public function attendanceRecords()
+{
+    return $this->hasMany(AttendanceRecord::class, 'student_id', 'user_id');
+}
 }

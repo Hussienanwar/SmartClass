@@ -17,6 +17,6 @@ class Student extends Model
     }
     public function attendanceRecords()
     {
-        return $this->hasMany(attendance_record::class, 'student_id', 'id');
+        return $this->hasMany(AttendanceRecord::class, 'student_id', 'id');
     }
 }
