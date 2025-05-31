@@ -1,24 +1,24 @@
-<div class="modal fade" id="addroom" tabindex="-1" aria-labelledby="addRoomLabel" aria-hidden="true">
+<div class="modal fade" id="addsubject-{{$room->id}}" tabindex="-1" aria-labelledby="addRoomLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow-lg rounded-4">
             <div class="modal-header bg-success text-white">
                 <h5 class="modal-title d-flex align-items-center" id="addRoomLabel">
-                    <i class="fas fa-plus-circle me-2"></i> Add New Room
+                    <i class="fas fa-plus-circle me-2"></i> Add New Subject
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
 
-            <form action="{{ route('rooms.store') }}" method="POST">
+            <form action="{{route('subjects.store',$room->id)}}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <!-- Room Name -->
                     <div class="mb-3">
                         <label for="roomName" class="form-label">
-                            <i class="fas fa-tag me-1 text-muted"></i> Room Name
+                            <i class="fas fa-tag me-1 text-muted"></i> Subject Name
                         </label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="roomName"
-                            name="name" placeholder="Enter room name">
+                            name="name" placeholder="Enter subject name">
                         @error('name')
                             <div class="invalid-feedback">
                                 <i class="fas fa-exclamation-circle me-1"></i> {{ $message }}
@@ -91,7 +91,7 @@
                 <!-- Submit Button -->
                 <div class="modal-footer justify-content-center">
                     <button type="submit" class="btn btn-success px-4">
-                        <i class="fas fa-check-circle me-1"></i> Create Room
+                        <i class="fas fa-check-circle me-1"></i> Create Subject
                     </button>
                 </div>
             </form>
@@ -100,4 +100,32 @@
 </div>
 
 <!-- Custom CSS + JS to Highlight Selected Icon -->
+<style>
+    .icon-radio:checked+img {
+        border-color: #198754 !important;
+        box-shadow: 0 0 10px rgba(25, 135, 84, 0.6);
+    }
 
+    .icon-radio:checked~.checkmark {
+        display: block !important;
+    }
+
+    .selectable-icon {
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .selectable-icon:hover {
+        transform: scale(1.05);
+    }
+</style>
+<style>
+    .d-grid::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .d-grid::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+    }
+</style>
